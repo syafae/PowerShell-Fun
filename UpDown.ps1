@@ -18,7 +18,7 @@ function Get-UpDownTime {
     )
     $lastShutdown = Get-WinEvent -ComputerName $Computername -FilterXPath '*[System[(EventID=1074)]]' -LogName "System" -MaxEvents 1
     $whenDown = $lastShutdown.TimeCreated
-    $lastBootTime = Get-CimInstance Win32_OperatingSystem | Select-Object LastBootUpTime
+    $lastBootTime = Get-CimInstance Win32_OperatingSystem -ComputerName $Computername | Select-Object LastBootUpTime
     $uptime = (Get-Date).Subtract($lastBootTime.LastBootUpTime)
     $downtime = $lastBootTime.LastBootUpTime.Subtract($whenDown)
     $matched = $lastShutdown.Message -match 'user\s+(?<account>.*)\sfor'
