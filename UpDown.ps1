@@ -14,7 +14,7 @@ function Get-UpDownTime {
 
     param (
         [parameter(ValueFromPipeline)]
-        $Computername = $env:COMPUTERNAME 
+        [string[]]$Computername = $env:COMPUTERNAME 
     )
     $lastShutdown = Get-WinEvent -ComputerName $Computername -FilterXPath '*[System[(EventID=1074)]]' -LogName "System" -MaxEvents 1
     $whenDown = $lastShutdown.TimeCreated
@@ -25,6 +25,9 @@ function Get-UpDownTime {
     if ($matched) {
 
         $userInitiatedtheshoutdown = $Matches.account 
+    }
+    else {
+        $userInitiatedtheshoutdown = ""
     }
 
     [PSCustomObject]@{
